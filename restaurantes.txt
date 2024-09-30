@@ -1,0 +1,1 @@
+{"burguer": {"prato": "hamburguer", "preco": "pequeno 5, medio 10, grande 15"}}
