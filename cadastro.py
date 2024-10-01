@@ -3,25 +3,18 @@ import os
 
 print("IFOOD-POBRE")
 
-ARQUIVO_USUARIOS = 'usuarios.txt'
-
-
+ARQUIVO_USUARIOS = 'dados_do_usuarios.txt'
 usuarios = {}
 
 def carregar_usuarios():
-    
     global usuarios
     if os.path.exists(ARQUIVO_USUARIOS):
         with open(ARQUIVO_USUARIOS, 'r') as f:
-            linhas= f.readlines()
-
-            if len(linhas) > 0:
-                usuarios = json.load(f)
+            usuarios = json.load(f)  
 
 def salvar_usuarios():
-    
     with open(ARQUIVO_USUARIOS, 'w') as f:
-        json.dump(usuarios, f)
+        json.dump(usuarios, f)  
 
 def cadastrar_usuario(nome, senha, endereco):
     if nome in usuarios:
@@ -43,7 +36,6 @@ def fazer_login(nome, senha):
 def verificar_usuario(nome):
     if nome in usuarios:
         print(f"Bem-vindo de volta, {nome}!")
-    
 
 def main():
     carregar_usuarios()  
