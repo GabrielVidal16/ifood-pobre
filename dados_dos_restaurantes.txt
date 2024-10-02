@@ -1,1 +1,1 @@
-{"mc donalds": {"big mc": 12.0, "batata": 6.0}, "burguer king": {"bk de chedar": 10.0, "refil": 10.0}, "kevitos": {"pipoca": 5.0}}
+{"mc donalds": {"big mc": 12.0, "batata": 6.0}, "burguer king": {"bk de chedar": 10.0, "refil": 10.0}}
