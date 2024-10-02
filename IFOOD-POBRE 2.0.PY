@@ -67,7 +67,7 @@ def menu_usuarios():
 if __name__ == "__main__":
     menu_usuarios()
 
-
+# funçoes dos restaurantes 
 
 ARQUIVO_RESTAURANTES = 'dados_dos_restaurantes.txt'
 restaurantes = {}
@@ -104,18 +104,20 @@ def listar_pratos(nome_restaurante):
             print(f"{prato}: R${preco:.2f}")
 
         total = 0
-        
+        lista_pedidos = []
         while True:
-            opcao_
             pedido = input("Digite o nome do prato que deseja pedir (ou 'sair' para finalizar o pedido): ")
             if pedido.lower() == 'sair':
                 break
+            if pedido.lower() != 'sair' and pedido in restaurantes[nome_restaurante]:
+                
+                lista_pedidos.append(pedido)
             if pedido in restaurantes[nome_restaurante]:
                 total += restaurantes[nome_restaurante][pedido]
                 print(f"Adicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
             else:
                 print("Prato não encontrado no menu.")
-        print(f"seu pedido ficou:{pedido}")
+        print(f"seu pedido ficou:{lista_pedidos}")
         print(f"Total do seu pedido: R${total:.2f}")
 
         if total ==0:
