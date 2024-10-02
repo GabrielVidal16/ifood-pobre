@@ -106,6 +106,7 @@ def listar_pratos(nome_restaurante):
         total = 0
         
         while True:
+            opcao_
             pedido = input("Digite o nome do prato que deseja pedir (ou 'sair' para finalizar o pedido): ")
             if pedido.lower() == 'sair':
                 break
