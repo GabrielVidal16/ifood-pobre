@@ -31,40 +31,82 @@ def fazer_login(nome, senha):
     if nome in usuarios and usuarios[nome]['senha'] == senha:
         print(f"Bem-vindo, {nome}!")
     else:
-        print("Nome de usuário ou senha incorretos.")
+        print("Nome de usuário ou senha incorretos, tente novamente: ")
+        nome = input("Digite o nome de usuário: ")
+        senha = input("Digite a senha: ")
+        fazer_login(nome,senha)
+    os.system('cls')
 
 def verificar_usuario(nome):
     if nome in usuarios:
         print(f"Bem-vindo de volta, {nome}!")
 
-def menu_usuarios():
-    carregar_usuarios()  
+def nova_tela(mensagem) :
+    os.system('cls')
+    print(mensagem + "\n")
 
+def menu_usuarios():
+    carregar_usuarios() 
+    os.system('cls') 
     while True:
-        print("\n1. Cadastrar Usuário")
+        
+        nova_tela("IFOOD POBRE")
+        print("1. Cadastrar Usuário")
         print("2. Fazer Login")
         print("3. Sair")
-        opcao = input("Escolha uma opção: ")
-
+        opcao = input("\nEscolha uma opção: ")
+        
         if opcao == '1':
-            nome = input("Digite o nome de usuário: ")
+            nova_tela("CADASTRO DE USUARIOS")
+
+            nome = input("Digite o nome de usuário: ").lower()
+
+            if nome == "" or nome.isdigit() or len(nome) < 3 :
+                if nome == "" :
+                    input("Você precisa preencher este campo")
+                elif nome.isdigit():
+                    input("Digite seu nome sem numeros")
+                if len(nome) < 3 :
+                    input("Você digitou um nome muito curto")
+                continue
+            
             senha = input("Digite a senha: ")
-            endereco = input("Digite seu endereço: ")
+            if senha == "" or len(senha) < 3 :
+                if senha == "" :
+                    input("Você precisa preencher este campo")
+                else:
+                    if len(senha) < 3 :
+                        input("Sua senha nao pode ser tao curta")
+                continue
+            
+            endereco = input("Digite o nome da sua rua: ")
+            if endereco == "" or endereco.isdigit() or len(endereco) < 8 :
+                if endereco == "" :
+                    input("Você precisa preencher este campo")
+                elif endereco.isdigit():
+                    input("Digite seu endereço sem numeros")
+                if len(endereco) < 8 :
+                    input("Você digitou um endereço invalido")
+                continue
+
             verificar_usuario(nome)  
             cadastrar_usuario(nome, senha, endereco)
             break
         elif opcao == '2':
-            nome = input("Digite o nome de usuário: ")
-            senha = input("Digite a senha: ")
+            nova_tela("LOGIN")
+            nome = input("Digite o nome de usuário: ").lower()
+            senha = input("\nDigite a senha: ")
             fazer_login(nome, senha)
             break
+
         elif opcao == '3':
-            print("Saindo do sistema.")
-            break
+            nova_tela("Saindo do sitema")
+            exit()
+        
         else:
             print("Opção inválida. Tente novamente.")
-
-if __name__ == "__main__":
+    
+if __name__ == '__main__' :
     menu_usuarios()
 
 # funçoes dos restaurantes 
@@ -88,25 +130,58 @@ def cadastrar_restaurante(nome):
     else:
         pratos = {}
         while True:
-            prato = input("Digite o nome do prato (ou 'sair' para terminar): ")
+            prato = input("\nDigite o nome do prato (ou 'sair' para terminar): ")
             if prato.lower() == 'sair':
                 break
-            preco = float(input(f"Digite o preço do prato '{prato}': R$"))
-            pratos[prato] = preco
-        restaurantes[nome] = pratos
-        salvar_restaurantes()
-        print(f"Restaurante '{nome}' cadastrado com sucesso!")
+            elif prato == "" :
+                print("É necessario pelo menos um prato para seu restaurante")
+                pass
+
+            elif prato.isdigit() :
+                print("O nome do seu prato nao pode ser um numero")
+                pass
+            
+                
+            elif prato != "" :
+
+                try :
+                    preco = float(input(f"\nDigite o preço do prato '{prato}': R$"))
+
+                except:
+                    print("\nO prato nao pode custar 0 reais\n")
+                    continue
+
+                if isinstance(preco, float) :
+                    if preco <= 0 :
+                        print("Seu prato nao pode custar 0 Reais")
+                    else :
+                        pratos[prato] = preco
+                        restaurantes[nome] = pratos
+                        salvar_restaurantes()
+                        print(f"Restaurante '{nome}' cadastrado com sucesso!")
+                else: print("digita certo animal")
+
+            else : 
+                print("Insira apenas numeros")
+        
+        
 
 def listar_pratos(nome_restaurante):
     if nome_restaurante in restaurantes:
-        print(f"Pratos do restaurante {nome_restaurante}:")
+        os.system('cls')
+        print(f"""{nome_restaurante.upper()}
+≡≡≡≡≡≡≡≡≡≡≡≡""")
+        print(f"""\nPratos do Restaurante:
+""")
+
+        
         for prato, preco in restaurantes[nome_restaurante].items():
-            print(f"{prato}: R${preco:.2f}")
+            print(f"""{prato}: R${preco:.2f}\n⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺""")
 
         total = 0
         lista_pedidos = []
         while True:
-            pedido = input("Digite o nome do prato que deseja pedir (ou 'sair' para finalizar o pedido): ")
+            pedido = input("\nDigite o nome do prato que deseja pedir (ou 'sair' para finalizar o pedido): ")
             if pedido.lower() == 'sair':
                 break
             if pedido.lower() != 'sair' and pedido in restaurantes[nome_restaurante]:
@@ -136,18 +211,23 @@ def listar_pratos(nome_restaurante):
                 print("obrigado, volte sempre!!!")
 
             elif pagamento == "pix":
-                print("ok, pague com o qrcod no nosso perfil! :)")
+                print("ok, pague com o qr code no nosso perfil! :)")
                 print("obrigado, volte sempre!!!")
             
         
     else:
-        print("Restaurante não encontrado.")
+        print("\nRestaurante não encontrado\n")
+        nome_restaurante = input("Tente novamente: ")
+        listar_pratos(nome_restaurante)
 
 def listar_restaurantes():
     if restaurantes:
-        print("Restaurantes cadastrados:")
+        nova_tela("RESTAURANTES CADASTRADOS")
+        count = 0
         for nome in restaurantes.keys():
-            print(f"- {nome}")
+            count += 1
+            print(f"({count}) - {nome}")
+        
     else:
         print("Nenhum restaurante cadastrado.")
 
@@ -155,21 +235,27 @@ def menu_restaurantes():
     carregar_restaurantes()
 
     while True:
-        print("\n1. Cadastrar Restaurante")
+        nova_tela("IFOOD POBRE")
+        print("   bem vindo\n")
+        print("1. Cadastrar Restaurante")
         print("2. Fazer Pedido")
         print("3. Sair")
-        opcao = input("Escolha uma opção: ")
+        opcao = input("\nEscolha uma opção: ")
 
         if opcao == '1':
+            nova_tela("CADASTRO DE RESTAURANTE")
             nome = input("Digite o nome do restaurante: ")
-            cadastrar_restaurante(nome)
             
+            cadastrar_restaurante(nome)
 
         elif opcao == '2':
             listar_restaurantes()
-            nome_restaurante = input("Digite o nome do restaurante para listar os pratos: ")
-            listar_pratos(nome_restaurante)
-            break
+            nome_restaurante = input("\nDigite o numero do restaurante para listar os pratos, ou 'voltar': ")
+            if nome_restaurante != 'voltar' :
+                listar_pratos(nome_restaurante)
+                break
+            elif nome_restaurante == 'voltar' :
+                continue
 
         elif opcao == '3':
             print("Saindo do sistema.")
