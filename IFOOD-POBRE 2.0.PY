@@ -13,8 +13,8 @@ def carregar_usuarios():
             usuarios = json.load(f)  
 
 def salvar_usuarios():
-    with open(ARQUIVO_USUARIOS, 'w') as f:
-        json.dump(usuarios, f)  
+    with open(ARQUIVO_USUARIOS, 'w',encoding="UTF-8") as f:
+        json.dump(usuarios, f, ensure_ascii=False)  
 
 def cadastrar_usuario(nome, senha, endereco):
     if nome in usuarios:
