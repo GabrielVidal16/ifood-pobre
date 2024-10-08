@@ -33,6 +33,9 @@ def cadastrar_restaurante(nome):
 
 def listar_pratos(nome_restaurante):
     if nome_restaurante in restaurantes:
+        match nome_restaurante :
+            case '1' : 
+                pass
         print(f"Pratos do restaurante {nome_restaurante}:")
         for prato, preco in restaurantes[nome_restaurante].items():
             print(f"{prato}: R${preco:.2f}")
