@@ -1,6 +1,8 @@
 import json
 import os
 
+nome = ""
+
 print("IFOOD-POBRE")
 
 ARQUIVO_USUARIOS = 'dados_do_usuarios.txt'
@@ -27,7 +29,10 @@ def cadastrar_usuario(nome, senha, endereco):
         salvar_usuarios()  
         print("Usuário cadastrado com sucesso!")
 
+
+
 def fazer_login(nome, senha):
+
     if nome in usuarios and usuarios[nome]['senha'] == senha:
         print(f"Bem-vindo, {nome}!")
     else:
@@ -35,11 +40,13 @@ def fazer_login(nome, senha):
         nome = input("Digite o nome de usuário: ")
         senha = input("Digite a senha: ")
         fazer_login(nome,senha)
+
     os.system('cls')
 
 def verificar_usuario(nome):
     if nome in usuarios:
         print(f"Bem-vindo de volta, {nome}!")
+    input("")
 
 def nova_tela(mensagem) :
     
@@ -90,14 +97,17 @@ def menu_usuarios():
                     input("Você digitou um endereço invalido")
                 continue
 
-            verificar_usuario(nome)  
+            input(f"Bem-vindo {nome}!")
+             
             cadastrar_usuario(nome, senha, endereco)
             break
+
         elif opcao == '2':
             nova_tela("LOGIN")
             nome = input("Digite o nome de usuário: ").lower()
             senha = input("\nDigite a senha: ")
             fazer_login(nome, senha)
+            verificar_usuario(nome)
             break
 
         elif opcao == '3':
@@ -247,11 +257,12 @@ def listar_restaurantes():
         print("Nenhum restaurante cadastrado.")
 
 def menu_restaurantes():
+    global nome
     carregar_restaurantes()
 
     while True:
+        global nome
         nova_tela("IFOOD POBRE")
-        print("   bem vindo\n")
         print("1. Cadastrar Restaurante")
         print("2. Fazer Pedido")
         print("3. Sair")
