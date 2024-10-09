@@ -13,8 +13,9 @@ def carregar_usuarios():
             usuarios = json.load(f)  
 
 def salvar_usuarios():
-    with open(ARQUIVO_USUARIOS, 'w',encoding="UTF-8") as f:
-        json.dump(usuarios, f, ensure_ascii=False)  
+    with open(ARQUIVO_USUARIOS, "w", encoding="utf-8") as f:
+        json.dump(usuarios, f, ensure_ascii=False) 
+
 
 def cadastrar_usuario(nome, senha, endereco):
     if nome in usuarios:
@@ -42,6 +43,7 @@ def verificar_usuario(nome):
         print(f"Bem-vindo de volta, {nome}!")
 
 def nova_tela(mensagem) :
+    
     os.system('cls')
     print(mensagem + "\n")
 
@@ -80,7 +82,7 @@ def menu_usuarios():
                 continue
             
             endereco = input("Digite o nome da sua rua: ")
-            if endereco == "" or endereco.isdigit() or len(endereco) < 8 :
+            if endereco == "" or endereco.isdigit() or len(endereco) < 6 :
                 if endereco == "" :
                     input("Você precisa preencher este campo")
                 elif endereco.isdigit():
@@ -120,9 +122,13 @@ def carregar_restaurantes():
         with open(ARQUIVO_RESTAURANTES, 'r') as f:
             restaurantes = json.load(f)
 
+
+with open(ARQUIVO_USUARIOS, "w", encoding="utf-8") as f:
+            json.dump(usuarios, f, ensure_ascii=False)
+
 def salvar_restaurantes():
-    with open(ARQUIVO_RESTAURANTES, 'w') as f:
-        json.dump(restaurantes, f)
+    with open(ARQUIVO_RESTAURANTES,'w', encoding="utf-8") as f:
+        json.dump(restaurantes, f, ensure_ascii=False)
 
 def cadastrar_restaurante(nome):
     if nome in restaurantes:
@@ -181,27 +187,32 @@ def listar_pratos(nome_restaurante):
         total = 0
         lista_pedidos = []
         while True:
-            pedido = input("\nDigite o nome do prato que deseja pedir (ou 'sair' para finalizar o pedido): ")
-            if pedido.lower() == 'sair':
+            pedido = input("\nDigite o nome do prato que deseja pedir ('finalizar' para finalizar o pedido, ou 'sair para voltar ao menu): ")
+            if pedido.lower() == 'finalizar':
                 break
-            if pedido.lower() != 'sair' and pedido in restaurantes[nome_restaurante]:
-                
+
+            elif pedido.lower() == 'sair' :
+                menu_restaurantes()
+
+            if pedido.lower() in restaurantes[nome_restaurante]:
                 lista_pedidos.append(pedido)
+
             if pedido in restaurantes[nome_restaurante]:
                 total += restaurantes[nome_restaurante][pedido]
-                print(f"Adicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
+                print(f"\nAdicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
             else:
                 print("Prato não encontrado no menu.")
-        print(f"seu pedido ficou:{lista_pedidos}")
-        print(f"Total do seu pedido: R${total:.2f}")
-
-        if total ==0:
-            print("voce nao adicionou nada ao carrinho")
+        
+        if lista_pedidos == [] and total == 0 :
+            input("\nvoce nao adicionou nada ao carrinho")
             listar_pratos(nome_restaurante)
 
-        if total >0:
+        elif lista_pedidos != [] and total > 0:
+            print(f"\nseu pedido ficou:{lista_pedidos}\n")
+            print(f"\nTotal do seu pedido: R${total:.2f}")
         
             pagamento = input(f"O pagamento sera no dinhero, cartão ou pix? ")
+            print("\n")
             if pagamento == "dinheiro":
                 print("ok pagamento com o entregador! :)")
                 print("obrigado, volte sempre!!!")
@@ -224,9 +235,14 @@ def listar_restaurantes():
     if restaurantes:
         nova_tela("RESTAURANTES CADASTRADOS")
         count = 0
+        lista_nomes_r = []
         for nome in restaurantes.keys():
+            lista_nomes_r.append(nome)
             count += 1
             print(f"({count}) - {nome}")
+
+        for indice, nome in enumerate(lista_nomes_r, start=1):
+            print(f"Índice: {indice}, restaurante: {nome}")
         
     else:
         print("Nenhum restaurante cadastrado.")
@@ -242,27 +258,28 @@ def menu_restaurantes():
         print("3. Sair")
         opcao = input("\nEscolha uma opção: ")
 
-        if opcao == '1':
-            nova_tela("CADASTRO DE RESTAURANTE")
-            nome = input("Digite o nome do restaurante: ")
-            
-            cadastrar_restaurante(nome)
+        match opcao:
 
-        elif opcao == '2':
-            listar_restaurantes()
-            nome_restaurante = input("\nDigite o numero do restaurante para listar os pratos, ou 'voltar': ")
-            if nome_restaurante != 'voltar' :
-                listar_pratos(nome_restaurante)
+            case '1' :
+                nova_tela("CADASTRO DE RESTAURANTE")
+                nome = input("Digite o nome do restaurante: ")
+
+                cadastrar_restaurante(nome)
+            case '2' :
+                listar_restaurantes()
+                nome_restaurante = input("\nDigite o numero do restaurante para listar os pratos, ou 'voltar': ")
+                if nome_restaurante != 'voltar' :
+                    listar_pratos(nome_restaurante)
+                    break
+                elif nome_restaurante == 'voltar' :
+                    continue
+
+            case '3':
+                print("Saindo do sistema.")
                 break
-            elif nome_restaurante == 'voltar' :
-                continue
 
-        elif opcao == '3':
-            print("Saindo do sistema.")
-            break
-
-        else:
-            print("Opção inválida. Tente novamente.")
+            case _ :
+                print("Opção inválida. Tente novamente.")
 
 
 menu_restaurantes()
