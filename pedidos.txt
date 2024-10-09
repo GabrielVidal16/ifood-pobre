@@ -1,0 +1,14 @@
+Pedido do Restaurante: mc donalds
+Pratos pedidos:
+- big mc
+- batata
+
+Total do pedido: R$18.00
+==============================
+Pedido do Restaurante: burguer king
+Pratos pedidos:
+- refil
+- bk de chedar
+
+Total do pedido: R$20.00
+==============================

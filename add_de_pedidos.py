@@ -1,62 +1,73 @@
 import json
-import os 
+import os
 
-ARQUIVO_PEDIDOS = 'pedidos.txt'
-pedidos = {}
+# ... (restante do seu código)
 
-def carregar_pedidos():
-    global pedidos
-    if os.path.exists(ARQUIVO_PEDIDOS):
-        with open(ARQUIVO_PEDIDOS, 'r') as f:
-            pedidos = json.load(f)  
+def salvar_pedido(nome_restaurante, lista_pedidos, total):
+    nome_arquivo = f'pedido_{nome_restaurante}.txt'
+    with open(nome_arquivo, 'w', encoding='utf-8') as f:
+        f.write(f"Pedido do Restaurante: {nome_restaurante}\n")
+        f.write("Pratos pedidos:\n")
+        for prato in lista_pedidos:
+            f.write(f"- {prato}\n")
+        f.write(f"\nTotal do pedido: R${total:.2f}\n")
+    print(f"\nSeu pedido foi salvo em {nome_arquivo}")
 
-def salvar_pedidos():
-    with open(ARQUIVO_PEDIDOS, 'w',encoding="UTF-8") as f:
-        json.dump(pedidos, f, ensure_ascii=False)  
+def listar_pratos(nome_restaurante):
+    if nome_restaurante in restaurantes:
+        os.system('cls')
+        print(f"""{nome_restaurante.upper()}
+≡≡≡≡≡≡≡≡≡≡≡≡""")
+        print(f"""\nPratos do Restaurante:
+""")
 
-def cadastrar_pedidos(nome, prato, endereco):
-    if nome in pedidos:
-        print("Usuário já existe.")
-    else:
-        pedidos[nome] = {
-            'prato': prato,
-            'endereco': endereco
-        }
-        salvar_pedidos()  
+        for prato, preco in restaurantes[nome_restaurante].items():
+            print(f"""{prato}: R${preco:.2f}\n⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺""")
 
-ARQUIVO_PEDIDOS.append(lista_pedidos)
+        total = 0
+        lista_pedidos = []
+        while True:
+            pedido = input("\nDigite o nome do prato que deseja pedir ('finalizar' para finalizar o pedido, ou 'sair' para voltar ao menu): ")
+            if pedido.lower() == 'finalizar':
+                break
 
-def main():
-    carregar_pedidos()
+            elif pedido.lower() == 'sair':
+                menu_restaurantes()
 
-    while True:
-        print("\n1. Cadastrar Restaurante")
-        print("2. Fazer Pedido")
-        print("3. Sair")
-        opcao = input("Escolha uma opção: ")
+            if pedido.lower() in restaurantes[nome_restaurante]:
+                lista_pedidos.append(pedido)
+                total += restaurantes[nome_restaurante][pedido]
+                print(f"\nAdicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
+            else:
+                print("Prato não encontrado no menu.")
+        
+        if lista_pedidos == [] and total == 0:
+            input("\nVocê não adicionou nada ao carrinho.")
+            listar_pratos(nome_restaurante)
 
-        if opcao == '1':
-            nome = input("Digite o nome do restaurante: ")
-            cadastrar_pedidos(nome)
+        elif lista_pedidos != [] and total > 0:
+            print(f"\nSeu pedido ficou: {lista_pedidos}\n")
+            print(f"\nTotal do seu pedido: R${total:.2f}")
             
+            salvar_pedido(nome_restaurante, lista_pedidos, total)  # Salvar pedido
 
-        elif opcao == '2':
-            salvar_pedidos()
-            nome_restaurante =("")
-            (nome_restaurante)
-            break
+            pagamento = input(f"O pagamento será em dinheiro, cartão ou pix? ")
+            print("\n")
+            if pagamento == "dinheiro":
+                print("Ok, pagamento com o entregador! :)")
+                print("Obrigado, volte sempre!!!")
 
-        elif opcao == '3':
-            print("Saindo do sistema.")
-            break
+            elif pagamento == "cartão":
+                print("Ok, o entregador levará a maquininha para o pagamento! :)")
+                print("Obrigado, volte sempre!!!")
 
-        else:
-            print("Opção inválida. Tente novamente.")
+            elif pagamento == "pix":
+                print("Ok, pague com o QR code no nosso perfil! :)")
+                print("Obrigado, volte sempre!!!")
 
+    else:
+        print("\nRestaurante não encontrado\n")
+        nome_restaurante = input("Tente novamente: ")
+        listar_pratos(nome_restaurante)
 
-main()
-
-
-
-    
-
+# ... (restante do seu código)

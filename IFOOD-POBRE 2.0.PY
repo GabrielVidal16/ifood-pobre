@@ -211,25 +211,7 @@ def listar_pratos(nome_restaurante):
             print(f"\nseu pedido ficou:{lista_pedidos}\n")
             print(f"\nTotal do seu pedido: R${total:.2f}")
         
-            pagamento = input(f"O pagamento sera no dinhero, cartão ou pix? ")
-            print("\n")
-            if pagamento == "dinheiro":
-                print("ok pagamento com o entregador! :)")
-                print("obrigado, volte sempre!!!")
-
-            elif pagamento == "cartão":
-                print("ok, o entregador levara a maquininha para o pagamento! :)")
-                print("obrigado, volte sempre!!!")
-
-            elif pagamento == "pix":
-                print("ok, pague com o qr code no nosso perfil! :)")
-                print("obrigado, volte sempre!!!")
             
-        
-    else:
-        print("\nRestaurante não encontrado\n")
-        nome_restaurante = input("Tente novamente: ")
-        listar_pratos(nome_restaurante)
 
 def listar_restaurantes():
     if restaurantes:
@@ -280,6 +262,75 @@ def menu_restaurantes():
 
             case _ :
                 print("Opção inválida. Tente novamente.")
+
+
+def salvar_pedido(nome_restaurante, lista_pedidos, total):
+    nome_arquivo = 'pedidos.txt'  # Um único arquivo para armazenar todos os pedidos
+    with open(nome_arquivo, 'a', encoding='utf-8') as f:  # Modo 'a' para anexar
+        f.write(f"Pedido do Restaurante: {nome_restaurante}\n")
+        f.write("Pratos pedidos:\n")
+        for prato in lista_pedidos:
+            f.write(f"- {prato}\n")
+        f.write(f"\nTotal do pedido: R${total:.2f}\n")
+        f.write("="*30 + "\n")  # Linha para separar os pedidos
+    print(f"\nSeu pedido foi salvo em {nome_arquivo}")
+
+def listar_pratos(nome_restaurante):
+    if nome_restaurante in restaurantes:
+        os.system('cls')
+        print(f"""{nome_restaurante.upper()}
+≡≡≡≡≡≡≡≡≡≡≡≡""")
+        print(f"""\nPratos do Restaurante:
+""")
+
+        for prato, preco in restaurantes[nome_restaurante].items():
+            print(f"""{prato}: R${preco:.2f}\n⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺""")
+
+        total = 0
+        lista_pedidos = []
+        while True:
+            pedido = input("\nDigite o nome do prato que deseja pedir ('finalizar' para finalizar o pedido, ou 'sair' para voltar ao menu): ")
+            if pedido.lower() == 'finalizar':
+                break
+
+            elif pedido.lower() == 'sair':
+                menu_restaurantes()
+
+            if pedido.lower() in restaurantes[nome_restaurante]:
+                lista_pedidos.append(pedido)
+                total += restaurantes[nome_restaurante][pedido]
+                print(f"\nAdicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
+            else:
+                print("Prato não encontrado no menu.")
+        
+        if lista_pedidos == [] and total == 0:
+            input("\nVocê não adicionou nada ao carrinho.")
+            listar_pratos(nome_restaurante)
+
+        elif lista_pedidos != [] and total > 0:
+            print(f"\nSeu pedido ficou: {lista_pedidos}\n")
+            print(f"\nTotal do seu pedido: R${total:.2f}")
+            
+            salvar_pedido(nome_restaurante, lista_pedidos, total)  # Salvar pedido
+
+            pagamento = input(f"O pagamento será em dinheiro, cartão ou pix? ")
+            print("\n")
+            if pagamento == "dinheiro":
+                print("Ok, pagamento com o entregador! :)")
+                print("Obrigado, volte sempre!!!")
+
+            elif pagamento == "cartão":
+                print("Ok, o entregador levará a maquininha para o pagamento! :)")
+                print("Obrigado, volte sempre!!!")
+
+            elif pagamento == "pix":
+                print("Ok, pague com o QR code no nosso perfil! :)")
+                print("Obrigado, volte sempre!!!")
+
+    else:
+        print("\nRestaurante não encontrado\n")
+        nome_restaurante = input("Tente novamente: ")
+        listar_pratos(nome_restaurante)
 
 
 menu_restaurantes()
