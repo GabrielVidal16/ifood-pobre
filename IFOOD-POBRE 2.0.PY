@@ -18,6 +18,7 @@ def salvar_usuarios():
     with open(ARQUIVO_USUARIOS, "w", encoding="utf-8") as f:
         json.dump(usuarios, f, ensure_ascii=False) 
 
+
 def cadastrar_usuario(nome, senha, endereco):
     if nome in usuarios:
         print("Usuário já existe.")
@@ -190,7 +191,7 @@ def listar_pratos(nome_restaurante):
         print(f"""\nPratos do Restaurante:
 """)
 
-        
+
         for prato, preco in restaurantes[nome_restaurante].items():
             print(f"""{prato}: R${preco:.2f}\n⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺⎺""")
 
@@ -198,6 +199,7 @@ def listar_pratos(nome_restaurante):
         lista_pedidos = []
         while True:
             pedido = input("\nDigite o nome do prato que deseja pedir ('finalizar' para finalizar o pedido, ou 'sair para voltar ao menu): ")
+
             if pedido.lower() == 'finalizar':
                 break
 
@@ -211,11 +213,11 @@ def listar_pratos(nome_restaurante):
                     menu_restaurantes()
 
             if pedido.lower() in restaurantes[nome_restaurante]:
-                lista_pedidos.append(pedido)
 
-            if pedido in restaurantes[nome_restaurante]:
+                lista_pedidos.append(pedido)
                 total += restaurantes[nome_restaurante][pedido]
                 print(f"\nAdicionado {pedido}: R${restaurantes[nome_restaurante][pedido]:.2f}. Total até agora: R${total:.2f}")
+                
             else:
                 print("Prato não encontrado no menu.")
         
@@ -226,6 +228,8 @@ def listar_pratos(nome_restaurante):
         elif lista_pedidos != [] and total > 0:
             print(f"\nseu pedido ficou:{lista_pedidos}\n")
             print(f"\nTotal do seu pedido: R${total:.2f}")
+
+            salvar_pedido(nome_restaurante,lista_pedidos,total)
         
             pagamento = input(f"O pagamento sera no dinheiro, cartão ou pix? ")
             print("\n")
@@ -243,12 +247,13 @@ def listar_pratos(nome_restaurante):
                 print("ok, pague com o qr code no nosso perfil! :)")
                 print("obrigado, volte sempre!!!")
                 exit()
-            
-        
-    else:
+
+    else :
         print("\nRestaurante não encontrado\n")
         nome_restaurante = input("Tente novamente: ")
         listar_pratos(nome_restaurante)
+
+     
 
 def listar_restaurantes():
   
@@ -306,5 +311,15 @@ def menu_restaurantes():
             case _ :
                 print("Opção inválida. Tente novamente.")
 
+
+def salvar_pedido(nome_restaurante, lista_pedidos, total):
+    nome_arquivo = 'pedidos.txt' 
+    with open(nome_arquivo, 'a', encoding='utf-8') as f:
+        f.write(f"Pedido do Restaurante: {nome_restaurante}\n")
+        f.write("Pratos pedidos:\n")
+        for prato in lista_pedidos:
+            f.write(f"- {prato}\n")
+        f.write(f"\nTotal do pedido: R${total:.2f}\n")
+        f.write("="*30 + "\n")
 
 menu_restaurantes()
