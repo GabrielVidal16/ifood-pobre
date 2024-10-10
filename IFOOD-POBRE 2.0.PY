@@ -3,7 +3,7 @@ import os
 
 nome = ""
 
-print("IFOOD-POBRE")
+print("IFOOD POBRE")
 
 ARQUIVO_USUARIOS = 'dados_do_usuarios.txt'
 usuarios = {}
