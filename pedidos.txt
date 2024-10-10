@@ -12,3 +12,15 @@ Pratos pedidos:
 
 Total do pedido: R$20.00
 ==============================
+Pedido do Restaurante: kevitos
+Pratos pedidos:
+- pipoca
+
+Total do pedido: R$5.00
+==============================
+Pedido do Restaurante: mc donalds
+Pratos pedidos:
+- big mc
+
+Total do pedido: R$12.00
+==============================
