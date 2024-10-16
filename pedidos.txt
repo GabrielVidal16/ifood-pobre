@@ -1,1 +1,8 @@
 
+Pedido do Restaurante: kevitos
+Pratos pedidos:
+- pipoca
+- pipoca
+
+Total do pedido: R$10.00
+==============================
